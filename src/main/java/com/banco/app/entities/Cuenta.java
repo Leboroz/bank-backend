@@ -1,4 +1,3 @@
-
 package com.banco.app.entities;
 
 import lombok.EqualsAndHashCode;
@@ -26,13 +25,13 @@ public class Cuenta {
   private String tipo;
   private double saldoInicial;
   private boolean estado;
-  private Cliente cliente;
+  private Cuenta cuenta;
 
-  public Cuenta(int numeroDeCuenta, String tipo, int saldoInicial, Boolean estado, Cliente cliente) {
+  public Cuenta(int numeroDeCuenta, String tipo, int saldoInicial, Boolean estado, Cuenta cuenta) {
     this.numeroDeCuenta = numeroDeCuenta;
     this.tipo = tipo;
     this.saldoInicial = saldoInicial;
     this.estado = estado;
-    this.cliente = cliente;
+    this.cuenta = cuenta;
   }
 }
