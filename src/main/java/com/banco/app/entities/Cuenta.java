@@ -25,13 +25,13 @@ public class Cuenta {
   private String tipo;
   private double saldoInicial;
   private boolean estado;
-  private Cuenta cuenta;
+  private Long clienteId;
 
-  public Cuenta(int numeroDeCuenta, String tipo, int saldoInicial, Boolean estado, Cuenta cuenta) {
+  public Cuenta(int numeroDeCuenta, String tipo, int saldoInicial, Boolean estado, Long clienteId) {
     this.numeroDeCuenta = numeroDeCuenta;
     this.tipo = tipo;
     this.saldoInicial = saldoInicial;
     this.estado = estado;
-    this.cuenta = cuenta;
+    this.clienteId = clienteId;
   }
 }

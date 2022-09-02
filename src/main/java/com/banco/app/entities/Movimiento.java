@@ -28,13 +28,13 @@ public class Movimiento {
   private String tipo;
   private double saldoInicial;
   private boolean estado;
-  private Cliente cliente;
+  private Long cuentaId;
 
-  public Movimiento(Date fecha, String tipo, int saldoInicial, Boolean estado, Cliente cliente) {
+  public Movimiento(Date fecha, String tipo, int saldoInicial, Boolean estado, Long cuentaId) {
     this.fecha = fecha;
     this.tipo = tipo;
     this.saldoInicial = saldoInicial;
     this.estado = estado;
-    this.cliente = cliente;
+    this.cuentaId = cuentaId;
   }
 }
