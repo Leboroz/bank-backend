@@ -22,4 +22,18 @@ public class ClienteService implements IClienteService {
     return (List<Cliente>) repository.findAll();
   }
 
+  @Override
+  public Cliente getClienteById(Long id) {
+    return (Cliente) repository.findById(id).get();
+  }
+
+  @Override
+  public void deleteClienteById(Long id) {
+    repository.deleteById(id);
+  }
+
+  @Override
+  public void saveCliente(Cliente cliente) {
+    repository.save(cliente);
+  }
 }
