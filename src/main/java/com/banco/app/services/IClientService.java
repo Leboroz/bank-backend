@@ -7,7 +7,7 @@ import com.banco.app.entities.Client;
  * IClientService
  */
 public interface IClientService {
-  List<Client> getClientes();
+  List<Client> getClients();
 
   List<Client> getClientsWithAccounts();
 

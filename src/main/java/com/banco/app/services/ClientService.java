@@ -1,12 +1,15 @@
 package com.banco.app.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.banco.app.entities.Cliente;
+import com.banco.app.entities.Cuenta;
 import com.banco.app.repositories.IClienteRepository;
+import com.banco.app.repositories.ICuentaRepository;
 
 /**
  * ClientService
@@ -17,9 +20,22 @@ public class ClienteService implements IClienteService {
   @Autowired
   private IClienteRepository repository;
 
+  @Autowired
+  private ICuentaRepository cuentaRepository;
+
   @Override
   public List<Cliente> getClientes() {
     return (List<Cliente>) repository.findAll();
+  }
+
+  @Override
+  public List<Cliente> getClientesWithCuentas() {
+    List<Cliente> clientes = new ArrayList<>();
+    getClientes().forEach(cliente -> {
+      cliente.setCuentas((List<Cuenta>) cuentaRepository.findByClienteId(cliente.getId()));
+      clientes.add(cliente);
+    });
+    return clientes;
   }
 
   @Override
