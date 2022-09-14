@@ -2,6 +2,7 @@ package com.banco.app.services;
 
 import java.util.List;
 
+import com.banco.app.Dto.Requests.RequestTransaction;
 import com.banco.app.Dto.Responses.ResponseTransaction;
 import com.banco.app.entities.Transaction;
 
@@ -11,9 +12,11 @@ import com.banco.app.entities.Transaction;
 public interface ITransactionService {
   List<ResponseTransaction> getTransactions();
 
-  Transaction getTransactionById(Long id);
+  Transaction getTransaction(Long id);
 
-  void deleteTransactionById(Long id);
+  ResponseTransaction deleteTransaction(Long id);
 
-  void saveTransaction(Transaction transaction, Long id);
+  ResponseTransaction updateTransaction(RequestTransaction transaction, Long id);
+
+  ResponseTransaction saveTransaction(RequestTransaction transaction);
 }
