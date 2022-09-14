@@ -2,6 +2,7 @@ package com.banco.app.services;
 
 import java.util.List;
 
+import com.banco.app.Dto.Requests.RequestAccount;
 import com.banco.app.entities.Account;
 
 /**
@@ -10,9 +11,13 @@ import com.banco.app.entities.Account;
 public interface IAccountService {
   List<Account> getAccounts();
 
-  Account getAccountById(Long id);
+  List<Account> getAccountsByClientId(Long id);
 
-  void deleteAccountById(Long id);
+  Account getAccount(Long id);
 
-  void saveAccount(Account account, long id);
+  Account deleteAccountById(Long id);
+
+  Account updateAccount(Long id, RequestAccount requestAccount);
+
+  Account saveAccount(RequestAccount requestAccount);
 }
