@@ -16,5 +16,5 @@ public class RequestTransaction {
   private double initialValue;
   private double value;
   private boolean state;
-  private Account account;
+  private Long accountId;
 }

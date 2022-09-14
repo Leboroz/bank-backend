@@ -2,6 +2,10 @@ package com.banco.app.Dto.Responses;
 
 import com.banco.app.entities.Client;
 
+import java.util.List;
+
+import com.banco.app.entities.Account;
+
 import lombok.Data;
 
 /**
@@ -20,6 +24,7 @@ public class ResponseClient {
   private String phoneNumber;
   private String address;
   private String password;
+  private List<Account> accounts;
 
   public ResponseClient(Client client) {
     id = client.getId();

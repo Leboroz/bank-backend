@@ -1,7 +1,5 @@
 package com.banco.app.Dto.Requests;
 
-import com.banco.app.entities.Client;
-
 import lombok.Data;
 
 /**
@@ -13,5 +11,5 @@ public class RequestAccount {
   private String type;
   private double initialValue;
   private boolean state;
-  private Client client;
+  private Long clientId;
 }
