@@ -2,54 +2,92 @@ package com.banco.app.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.banco.app.entities.Cliente;
-import com.banco.app.entities.Cuenta;
-import com.banco.app.repositories.IClienteRepository;
-import com.banco.app.repositories.ICuentaRepository;
+import com.banco.app.repositories.IClientRepository;
+
+import com.banco.app.Dto.Mapper;
+import com.banco.app.Dto.Requests.RequestClient;
+import com.banco.app.Dto.Responses.ResponseClient;
+import com.banco.app.entities.Account;
+import com.banco.app.entities.Client;
+import com.banco.app.repositories.IAccountRepository;
 
 /**
  * ClientService
  */
 @Service
-public class ClienteService implements IClienteService {
+public class ClientService implements IClientService {
 
   @Autowired
-  private IClienteRepository repository;
+  private IClientRepository repository;
 
-  @Autowired
-  private ICuentaRepository cuentaRepository;
+  private AccountService accountService;
 
   @Override
-  public List<Cliente> getClientes() {
-    return (List<Cliente>) repository.findAll();
+  public List<ResponseClient> getClients() {
+    return Mapper.clientsToResponseClients((List<Client>) repository.findAll());
   }
 
   @Override
-  public List<Cliente> getClientesWithCuentas() {
-    List<Cliente> clientes = new ArrayList<>();
-    getClientes().forEach(cliente -> {
-      cliente.setCuentas((List<Cuenta>) cuentaRepository.findByClienteId(cliente.getId()));
-      clientes.add(cliente);
+  public List<ResponseClient> getClientsWithAccounts() {
+    List<ResponseClient> clientsWithAccounts = new ArrayList<>();
+    repository.findAll().forEach(client -> {
+      List<Account> accounts = accountService.getAccountsByClientId(client.getId);
+      if (Objects.nonNull(accounts)) {
+        ResponseClient responseClient = new ResponseClient(client);
+        responseClient.setAccounts(accounts);
+        clientsWithAccounts.add(responseClient);
+      }
     });
-    return clientes;
+    return clientsWithAccounts;
   }
 
   @Override
-  public Cliente getClienteById(Long id) {
-    return (Cliente) repository.findById(id).get();
+  public Client getClient(Long id) {
+    return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Client not found"));
+  }
+
+  @Transactional
+  @Override
+  public Client updateClient(Long id, RequestClient requestClient) {
+    Client client = getClient(id);
+    client.setId(requestClient.getId());
+    client.setName(requestClient.getName());
+    client.setSet(requestClient.getSex());
+    client.setAge(requestClient.getAge());
+    client.setIdentification(requestClient.getIdentification());
+    client.setState(requestClient.isState());
+    client.setPhoneNumber(requestClient.getPhoneNumber());
+    client.setAddress(requestClient.getAddress());
+    client.setPassword(requestClient.getPassword());
+    return client;
   }
 
   @Override
-  public void deleteClienteById(Long id) {
-    repository.deleteById(id);
+  public Client deleteClient(Long id) {
+    Client client = getClient(id);
+    repository.delete(client);
+    return client;
   }
 
   @Override
-  public void saveCliente(Cliente cliente) {
-    repository.save(cliente);
+  public Client saveClient(RequestClient requestClient) {
+    Client client = new Client();
+    client.setId(requestClient.getId());
+    client.setName(requestClient.getName());
+    client.setSet(requestClient.getSex());
+    client.setAge(requestClient.getAge());
+    client.setIdentification(requestClient.getIdentification());
+    client.setState(requestClient.isState());
+    client.setPhoneNumber(requestClient.getPhoneNumber());
+    client.setAddress(requestClient.getAddress());
+    client.setPassword(requestClient.getPassword());
+    return repository.save(client);
   }
 }

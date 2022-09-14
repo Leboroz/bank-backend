@@ -1,19 +1,23 @@
 package com.banco.app.services;
 
 import java.util.List;
-import com.banco.app.entities.Client;
+
+import com.banco.app.Dto.Requests.RequestClient;
+import com.banco.app.Dto.Responses.ResponseClient;
 
 /**
  * IClientService
  */
 public interface IClientService {
-  List<Client> getClients();
+  List<ResponseClient> getClients();
 
-  List<Client> getClientsWithAccounts();
+  List<ResponseClient> getClientsWithAccounts();
 
-  Client getClientById(Long id);
+  ResponseClient getClient(Long id);
 
-  void deleteClientById(Long id);
+  ResponseClient deleteClient(Long id);
 
-  void saveClient(Client client);
+  ResponseClient updateClient(Long id, RequestClient requestClient);
+
+  ResponseClient saveClient(RequestClient requestClient);
 }

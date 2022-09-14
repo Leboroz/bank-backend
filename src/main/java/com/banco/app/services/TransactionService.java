@@ -6,6 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.banco.app.Dto.Requests.RequestTransaction;
+import com.banco.app.Dto.Responses.ResponseTransaction;
+import com.banco.app.entities.Transaction;
+import com.banco.app.repositories.IAccountRepository;
+import com.banco.app.repositories.ITransactionRepository;
+
 /**
  * ClientService
  */
@@ -15,29 +21,50 @@ public class TransactionService implements ITransactionService {
   @Autowired
   private ITransactionRepository repository;
 
-  @Autowired
-  private ICuentaRepository cuentaRepository;
+  private AccountService accountService;
 
   @Override
-  public List<ResponseMovimiento> getMovimientos() {
+  public List<ResponseTransaction> getTransactions() {
     return repository.findAll().stream()
-        .map(movimiento -> new ResponseMovimiento(movimiento)).toList();
+        .map(transaction -> new ResponseTransaction(transaction)).toList();
   }
 
   @Override
-  public Movimiento getMovimientoById(Long id) {
-    return (Movimiento) repository.findById(id).get();
+  public Transaction getTransaction(Long id) {
+    return (Transaction) repository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
   }
 
   @Override
-  public void deleteMovimientoById(Long id) {
-    repository.deleteById(id);
+  public ResponseTransaction deleteTransaction(Long id) {
+    Transaction transaction = getTransaction(id);
+    repository.delete(transaction);
+    return new ResponseTransaction(transaction);
+
   }
 
   @Override
-  public void saveMovimiento(Movimiento movimiento, Long id) {
-    movimiento.setCuenta(cuentaRepository.getReferenceById(id));
-    repository.save(movimiento);
+  public ResponseTransaction updateTransaction(RequestTransaction requestTransaction, Long id) {
+    Transaction transaction = getTransaction(id);
+    transaction.setDate(requestTransaction.getDate());
+    transaction.setType(requestTransaction.getType());
+    transaction.setInitialValue(requestTransaction.getInitialValue());
+    transaction.setValue(requestTransaction.getValue());
+    transaction.setState(requestTransaction.getState());
+    transaction.setState(accountService.getAccount(requestTransaction.getAccountId()));
+    return new ResponseTransaction(repository.save(transaction));
+  }
+
+  @Override
+  public ResponseTransaction saveTransaction(RequestTransaction requestTransaction) {
+    Transaction transaction = new Transaction();
+    transaction.setDate(requestTransaction.getDate());
+    transaction.setType(requestTransaction.getType());
+    transaction.setInitialValue(requestTransaction.getInitialValue());
+    transaction.setValue(requestTransaction.getValue());
+    transaction.setState(requestTransaction.getState());
+    transaction.setState(accountService.getAccount(requestTransaction.getAccountId()));
+    return new ResponseTransaction(repository.save(transaction));
   }
 
 }
